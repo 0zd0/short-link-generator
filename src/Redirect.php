@@ -5,10 +5,21 @@
 	use Pavl\Short_Link_Generator;
 	
 	class Redirect {
+		
+		/**
+		 * Registers redirection action
+		 *
+		 * @return void
+		 */
 		public function register(): void {
 			add_action( 'template_redirect', [ $this, 'handle_redirect' ] );
 		}
 		
+		/**
+		 * Handles the redirection process
+		 *
+		 * @return void
+		 */
 		public function handle_redirect(): void {
 			if ( ! is_singular( Post\Type\Short_Link::$slug ) ) {
 				return;
@@ -25,6 +36,11 @@
 			wp_redirect( $redirect );
 		}
 		
+		/**
+		 * Redirects to a 404 page
+		 *
+		 * @return void
+		 */
 		public function redirect_to_404(): void {
 			global $wp_query;
 			$wp_query->set_404();
@@ -32,6 +48,13 @@
 			get_template_part( 404 );
 		}
 		
+		/**
+		 * Checks for unique clicks and adds them
+		 *
+		 * @param int $post_id
+		 *
+		 * @return void
+		 */
 		private function check_unique_click( int $post_id ): void {
 			$session = new Session();
 			$session->start_session();

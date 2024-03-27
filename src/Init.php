@@ -6,14 +6,30 @@
 	
 	class Init extends Singleton {
 		private string $rewrite_option = 'rewrite_rules';
+		
+		/**
+		 * Function to activate the plugin
+		 *
+		 * @return void
+		 */
         public function activate(): void {
 	        delete_option( $this->rewrite_option );
         }
 		
+		/**
+		 * Function to deactivate the plugin
+		 *
+		 * @return void
+		 */
 		public function deactivate(): void {
 			delete_option( $this->rewrite_option );
 		}
 		
+		/**
+		 * Initializes the plugin
+		 *
+		 * @return void
+		 */
 		public static function init(): void {
 			$localization = new Localization();
             $localization->register();

@@ -16,6 +16,9 @@
 		private string       $column_key_number_clicks        = 'number-clicks';
 		private string       $column_key_number_unique_clicks = 'number-unique-clicks';
 		
+		/**
+		 * Constructor to set labels and new columns
+		 */
 		public function __construct() {
 			$this->labels      = [
 				'name'               => __( 'Short Links', 'short-link-generator' ),
@@ -41,10 +44,20 @@
 			];
 		}
 		
+		/**
+		 * Registers post type registration hook
+		 *
+		 * @return void
+		 */
 		public function register(): void {
 			add_action( 'init', array( $this, 'register_post_type' ) );
 		}
 		
+		/**
+		 * Registers the custom post type
+		 *
+		 * @return void
+		 */
 		public function register_post_type(): void {
 			$args = array(
 				'labels'             => $this->labels,
@@ -64,11 +77,21 @@
 			register_post_type( $this::$slug, $args );
 		}
 		
+		/**
+		 * Registers meta boxes hooks
+		 *
+		 * @return void
+		 */
 		public function add_meta_boxes(): void {
 			add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
 			add_action( "save_post_{$this::$slug}", array( $this, 'register_save_meta_boxes' ) );
 		}
 		
+		/**
+		 * Registers meta boxes
+		 *
+		 * @return void
+		 */
 		public function register_meta_boxes(): void {
 			add_meta_box(
 				'short_link_meta_box_main',
@@ -78,6 +101,13 @@
 			);
 		}
 		
+		/**
+		 * Renders the meta box content
+		 *
+		 * @param object $post
+		 *
+		 * @return void
+		 */
 		public function render_meta_box( object $post ) {
 			$redirect_value = get_post_meta( $post->ID, self::$field_key_redirect, true );
 			$redirect_label = __( 'Redirect to:', 'short-link-generator' );
@@ -94,6 +124,13 @@
 			);
 		}
 		
+		/**
+		 * Saves meta box data
+		 *
+		 * @param string $post_id
+		 *
+		 * @return void
+		 */
 		public function register_save_meta_boxes( string $post_id ): void {
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 				return;
@@ -106,12 +143,24 @@
 			}
 		}
 		
+		/**
+		 * Registers columns hooks
+		 *
+		 * @return void
+		 */
 		public function add_columns(): void {
 			add_filter( "manage_{$this::$slug}_posts_columns", array( $this, 'register_columns' ) );
 			add_action( "manage_{$this::$slug}_posts_custom_column", array( $this, 'register_columns_content' ) );
 			add_filter( "manage_edit-{$this::$slug}_sortable_columns", array( $this, 'register_sortable_columns' ) );
 		}
 		
+		/**
+		 * Add sorting to new columns
+		 *
+		 * @param array $columns
+		 *
+		 * @return array
+		 */
 		public function register_sortable_columns( array $columns ): array {
 			$columns[ $this->column_key_number_clicks ]        = $this->column_key_number_clicks;
 			$columns[ $this->column_key_number_unique_clicks ] = $this->column_key_number_unique_clicks;
@@ -119,10 +168,24 @@
 			return $columns;
 		}
 		
+		/**
+		 * Add new columns
+		 *
+		 * @param array $columns
+		 *
+		 * @return array
+		 */
 		public function register_columns( array $columns ): array {
 			return array_slice( $columns, 0, 2 ) + $this->new_columns + $columns;
 		}
 		
+		/**
+		 * Add columns content
+		 *
+		 * @param string $column_name
+		 *
+		 * @return void
+		 */
 		public function register_columns_content( string $column_name ): void {
 			if ( $column_name == $this->column_key_page_url ) {
 				$post_url = get_the_permalink();
@@ -152,10 +215,20 @@
 			}
 		}
 		
+		/**
+		 * Registers submit box hooks
+		 *
+		 * @return void
+		 */
 		public function add_info() {
 			add_action( 'post_submitbox_misc_actions', [ $this, 'register_post_info_submitbox' ] );
 		}
 		
+		/**
+		 * Adds additional information to the post submit box
+		 *
+		 * @return void
+		 */
 		public function register_post_info_submitbox() {
 			global $post;
 			$clicks_value = get_post_meta( $post->ID, self::$field_key_number_clicks, true );
@@ -176,6 +249,8 @@
 		}
 		
 		/**
+		 * Retrieves the redirect URL for a post
+		 *
 		 * @param int $post_id
 		 *
 		 * @return string
@@ -185,6 +260,8 @@
 		}
 		
 		/**
+		 * Retrieves the number of clicks for a post
+		 *
 		 * @param int $post_id
 		 *
 		 * @return int
@@ -196,6 +273,8 @@
 		}
 		
 		/**
+		 * Retrieves the number of unique clicks for a post
+		 *
 		 * @param int $post_id
 		 *
 		 * @return int
@@ -207,6 +286,8 @@
 		}
 		
 		/**
+		 * Increases the click count for a post
+		 *
 		 * @param int $post_id
 		 *
 		 * @return void
@@ -217,6 +298,8 @@
 		}
 		
 		/**
+		 * Increases the unique click count for a post
+		 *
 		 * @param int $post_id
 		 *
 		 * @return void
