@@ -5,12 +5,16 @@
 	use Pavl\Short_Link_Generator\Config;
 	
 	class Short_Link {
-		private array  $labels                  = [];
-		private array  $new_columns             = [];
-		private string $slug                    = 'short-link';
-		private string $field_key_redirect      = 'short-link-redirect';
-		private string $column_key_page_url     = 'page_url';
-		private string $column_key_redirect_url = 'redirect_url';
+		private array  $labels                          = [];
+		private array  $new_columns                     = [];
+		private string $slug                            = 'short-link';
+		private string $field_key_redirect              = 'short-link-redirect';
+		private string $field_key_number_clicks         = 'short-link-number-clicks';
+		private string $field_key_number_unique_clicks  = 'short-link-number-unique-clicks';
+		private string $column_key_page_url             = 'page-url';
+		private string $column_key_redirect_url         = 'redirect-url';
+		private string $column_key_number_clicks        = 'number-clicks';
+		private string $column_key_number_unique_clicks = 'number-unique-clicks';
 		
 		public function __construct() {
 			$this->labels      = [
@@ -30,8 +34,10 @@
 				'not_found_in_trash' => __( 'No Short Links found in Trash', 'short-link-generator' )
 			];
 			$this->new_columns = [
-				$this->column_key_page_url     => __( 'Page URL', 'short-link-generator' ),
-				$this->column_key_redirect_url => __( 'Redirect URL', 'short-link-generator' ),
+				$this->column_key_page_url             => __( 'Page URL', 'short-link-generator' ),
+				$this->column_key_redirect_url         => __( 'Redirect URL', 'short-link-generator' ),
+				$this->column_key_number_clicks        => __( 'Number of clicks', 'short-link-generator' ),
+				$this->column_key_number_unique_clicks => __( 'Number of unique clicks', 'short-link-generator' ),
 			];
 		}
 		
@@ -89,7 +95,7 @@
 				return;
 			}
 			$redirect_value = $_POST[ $this->field_key_redirect ] ?? '';
-			if (filter_var( $redirect_value, FILTER_VALIDATE_URL )) {
+			if ( filter_var( $redirect_value, FILTER_VALIDATE_URL ) ) {
 				remove_action( 'save_post', array( $this, 'register_save_meta_boxes' ) );
 				update_post_meta( $post_id, $this->field_key_redirect, sanitize_text_field( $_POST[ $this->field_key_redirect ] ) );
 				add_action( 'save_post', array( $this, 'register_save_meta_boxes' ) );
@@ -99,6 +105,14 @@
 		public function add_columns(): void {
 			add_filter( "manage_{$this->slug}_posts_columns", array( $this, 'register_columns' ) );
 			add_action( "manage_{$this->slug}_posts_custom_column", array( $this, 'register_columns_content' ) );
+			add_filter( "manage_edit-{$this->slug}_sortable_columns", array( $this, 'register_sortable_columns' ) );
+		}
+		
+		public function register_sortable_columns( array $columns ): array {
+			$columns[ $this->column_key_number_clicks ]        = $this->column_key_number_clicks;
+			$columns[ $this->column_key_number_unique_clicks ] = $this->column_key_number_unique_clicks;
+			
+			return $columns;
 		}
 		
 		public function register_columns( array $columns ): array {
@@ -106,13 +120,18 @@
 		}
 		
 		public function register_columns_content( string $column_name ): void {
-			if ($column_name == $this->column_key_page_url) {
+			if ( $column_name == $this->column_key_page_url ) {
 				$post_url = get_the_permalink();
-				echo sprintf('<a href="%s">%s</a>', esc_url($post_url), urldecode(esc_url($post_url)));
-			}
-			elseif ($column_name == $this->column_key_redirect_url) {
+				echo sprintf( '<a href="%s">%s</a>', esc_url( $post_url ), urldecode( esc_url( $post_url ) ) );
+			} elseif ( $column_name == $this->column_key_redirect_url ) {
 				$redirect_value = get_post_meta( get_the_ID(), $this->field_key_redirect, true );
-				echo sprintf('<a href="%s">%s</a>', esc_url($redirect_value), urldecode(esc_url($redirect_value)));
+				echo sprintf( '<a href="%s">%s</a>', esc_url( $redirect_value ), urldecode( esc_url( $redirect_value ) ) );
+			} elseif ( $column_name == $this->column_key_number_clicks ) {
+				$number_clicks_value = get_post_meta( get_the_ID(), $this->field_key_number_clicks, true );
+				echo sprintf( '%d', $number_clicks_value );
+			} elseif ( $column_name == $this->column_key_number_unique_clicks ) {
+				$number_unique_clicks_value = get_post_meta( get_the_ID(), $this->field_key_number_unique_clicks, true );
+				echo sprintf( '%d', $number_unique_clicks_value );
 			}
 		}
 	}
