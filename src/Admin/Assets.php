@@ -2,6 +2,9 @@
 	
 	namespace Pavl\Short_Link_Generator\Admin;
 	
+	/**
+	 * To work with assets in the admin panel
+	 */
 	class Assets {
 		/**
 		 * Registers admin assets hooks

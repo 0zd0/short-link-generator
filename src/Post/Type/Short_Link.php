@@ -4,18 +4,55 @@
 	
 	use Pavl\Short_Link_Generator\Config;
 	
+	/**
+	 * Class for working with a custom post type
+	 */
 	class Short_Link {
-		public static string $slug                            = 'short-link';
-		private array        $labels                          = [];
-		private array        $new_columns                     = [];
-		public static string $field_key_redirect              = 'short-link-redirect';
-		public static string $field_key_number_clicks         = 'short-link-number-clicks';
-		public static string $field_key_number_unique_clicks  = 'short-link-number-unique-clicks';
-		private string       $column_key_page_url             = 'page-url';
-		private string       $column_key_redirect_url         = 'redirect-url';
-		private string       $column_key_number_clicks        = 'number-clicks';
-		private string       $column_key_number_unique_clicks = 'number-unique-clicks';
+		/**
+		 * @var string $slug slug custom post type
+		 */
+		public static string $slug = 'short-link';
+		/**
+		 * @var array $labels labels for custom post type
+		 */
+		private array $labels = [];
+		/**
+		 * @var array $new_columns new columns for this type of post
+		 */
+		private array $new_columns = [];
+		/**
+		 * @var string $field_key_redirect meta field key for the redirect field
+		 */
+		public static string $field_key_redirect = 'short-link-redirect';
+		/**
+		 * @var string $field_key_number_clicks meta field key for the number clicks field
+		 */
+		public static string $field_key_number_clicks = 'short-link-number-clicks';
+		/**
+		 * @var string $field_key_number_unique_clicks meta field key for the number unique clicks field
+		 */
+		public static string $field_key_number_unique_clicks = 'short-link-number-unique-clicks';
+		/**
+		 * @var string $column_key_page_url key for column with page url
+		 */
+		private string $column_key_page_url = 'page-url';
+		/**
+		 * @var string $column_key_redirect_url key for column with redirect url
+		 */
+		private string $column_key_redirect_url = 'redirect-url';
+		/**
+		 * @var string $column_key_number_clicks key for column with number clicks
+		 */
+		private string $column_key_number_clicks = 'number-clicks';
+		/**
+		 * @var string $column_key_number_unique_clicks key for column with number unique clicks
+		 */
+		private string $column_key_number_unique_clicks = 'number-unique-clicks';
 		
+		/**
+		 * Initializes information translation
+		 *
+		 */
 		public function __construct() {
 			add_action( 'init', [ $this, 'completing_translations' ] );
 		}
@@ -65,7 +102,7 @@
 		 * @return void
 		 */
 		public function register_post_type(): void {
-			$args         = array(
+			$args = array(
 				'labels'             => $this->labels,
 				'public'             => true,
 				'publicly_queryable' => true,
@@ -110,7 +147,7 @@
 		/**
 		 * Renders the meta box content
 		 *
-		 * @param object $post
+		 * @param object $post WP_Post object
 		 *
 		 * @return void
 		 */
@@ -133,7 +170,7 @@
 		/**
 		 * Saves meta box data
 		 *
-		 * @param string $post_id
+		 * @param string $post_id post id
 		 *
 		 * @return void
 		 */
@@ -163,7 +200,7 @@
 		/**
 		 * Add sorting to new columns
 		 *
-		 * @param array $columns
+		 * @param array $columns sortable columns
 		 *
 		 * @return array
 		 */
@@ -177,7 +214,7 @@
 		/**
 		 * Add new columns
 		 *
-		 * @param array $columns
+		 * @param array $columns default columns
 		 *
 		 * @return array
 		 */
@@ -188,7 +225,7 @@
 		/**
 		 * Add columns content
 		 *
-		 * @param string $column_name
+		 * @param string $column_name column name
 		 *
 		 * @return void
 		 */
@@ -257,7 +294,7 @@
 		/**
 		 * Retrieves the redirect URL for a post
 		 *
-		 * @param int $post_id
+		 * @param int $post_id post id
 		 *
 		 * @return string
 		 */
@@ -268,7 +305,7 @@
 		/**
 		 * Retrieves the number of clicks for a post
 		 *
-		 * @param int $post_id
+		 * @param int $post_id post id
 		 *
 		 * @return int
 		 */
@@ -281,7 +318,7 @@
 		/**
 		 * Retrieves the number of unique clicks for a post
 		 *
-		 * @param int $post_id
+		 * @param int $post_id post id
 		 *
 		 * @return int
 		 */
@@ -294,7 +331,7 @@
 		/**
 		 * Increases the click count for a post
 		 *
-		 * @param int $post_id
+		 * @param int $post_id post id
 		 *
 		 * @return void
 		 */
@@ -306,7 +343,7 @@
 		/**
 		 * Increases the unique click count for a post
 		 *
-		 * @param int $post_id
+		 * @param int $post_id post id
 		 *
 		 * @return void
 		 */

@@ -2,7 +2,13 @@
 	
 	namespace Pavl\Short_Link_Generator;
 	
+	/**
+	 * Class for storing in session
+	 */
 	class Session {
+		/**
+		 * @var string $key_last_time_click last click time key in session
+		 */
 		public static string $key_last_time_click = 'last_click_time';
 		
 		/**
@@ -19,9 +25,9 @@
 		/**
 		 * Retrieves the last click time for a given post ID from the session
 		 *
-		 * @param int $post_id
+		 * @param int $post_id post id
 		 *
-		 * @return int
+		 * @return int time in seconds
 		 */
 		public function get_last_time_click( int $post_id ): int {
 			$session_last_click_time = 0;
@@ -35,8 +41,8 @@
 		/**
 		 * Saves the last click time for a given post ID into the session
 		 *
-		 * @param int $post_id
-		 * @param int $time
+		 * @param int $post_id post id
+		 * @param int $time new time in seconds
 		 *
 		 * @return void
 		 */

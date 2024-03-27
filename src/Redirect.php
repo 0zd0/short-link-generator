@@ -4,6 +4,9 @@
 	
 	use Pavl\Short_Link_Generator;
 	
+	/**
+	 * Class for redirecting short links
+	 */
 	class Redirect {
 		
 		/**
@@ -51,7 +54,7 @@
 		/**
 		 * Checks for unique clicks and adds them
 		 *
-		 * @param int $post_id
+		 * @param int $post_id post id
 		 *
 		 * @return void
 		 */

@@ -3,8 +3,14 @@
 	namespace Pavl\Short_Link_Generator;
 	
     use Pavl\Short_Link_Generator\Admin;
-	
+
+    /**
+     * Initialization plugin class
+     */
 	class Init extends Singleton {
+		/**
+		 * @var string $rewrite_option rewrite rules option key
+		 */
 		private string $rewrite_option = 'rewrite_rules';
 		
 		/**

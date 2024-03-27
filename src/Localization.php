@@ -2,6 +2,9 @@
 	
 	namespace Pavl\Short_Link_Generator;
 	
+	/**
+	 * class for working with plugin localization
+	 */
 	class Localization {
 		/**
 		 * Registers the localization

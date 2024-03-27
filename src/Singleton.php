@@ -2,7 +2,13 @@
 	
 	namespace Pavl\Short_Link_Generator;
 	
+	/**
+	 * Class for working singleton
+	 */
 	abstract class Singleton {
+		/**
+		 * @var array $instances singleton instances
+		 */
 		private static array $instances = [];
 		
 		/**
