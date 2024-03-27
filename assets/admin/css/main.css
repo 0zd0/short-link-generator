@@ -1,0 +1,14 @@
+.slg-meta-box__field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.slg-meta-box__label {
+
+}
+
+.slg-meta-box__input {
+    width: 100%;
+}
