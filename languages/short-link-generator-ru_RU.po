@@ -1,0 +1,115 @@
+# Copyright (C) 2024 Pavl
+# This file is distributed under the A "Slug" license name e.g. GPL2.
+msgid ""
+msgstr ""
+"Project-Id-Version: Short Link Generator 1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/short-link-"
+"generator\n"
+"POT-Creation-Date: 2024-03-27T14:00:10+00:00\n"
+"PO-Revision-Date: 2024-03-27 17:03+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.2\n"
+"X-Domain: short-link-generator\n"
+
+#. Plugin Name of the plugin
+#: D:/OSPanel/domains/wp-dev/wp-content/plugins/short-link-generator/short-link-generator.php
+msgid "Short Link Generator"
+msgstr ""
+
+#. Description of the plugin
+#: D:/OSPanel/domains/wp-dev/wp-content/plugins/short-link-generator/short-link-generator.php
+msgid "Plugin for generating shortened links"
+msgstr "Плагин для генерации сокращенных ссылок"
+
+#. Author of the plugin
+#: D:/OSPanel/domains/wp-dev/wp-content/plugins/short-link-generator/short-link-generator.php
+msgid "Pavl"
+msgstr ""
+
+#: src/Post/Type/Short_Link.php:23
+#: src/Post/Type/Short_Link.php:24
+#: src/Post/Type/Short_Link.php:26
+#: src/Post/Type/Short_Link.php:27
+msgid "Short Links"
+msgstr "Короткие ссылки"
+
+#: src/Post/Type/Short_Link.php:25
+msgid "Short Link"
+msgstr "Короткая ссылка"
+
+#: src/Post/Type/Short_Link.php:28
+msgid "Add New"
+msgstr "Добавить новую"
+
+#: src/Post/Type/Short_Link.php:29
+msgid "Add New Short Link"
+msgstr "Добавить новую короткую ссылку"
+
+#: src/Post/Type/Short_Link.php:30
+msgid "New Short Link"
+msgstr "Новая короткая ссылка"
+
+#: src/Post/Type/Short_Link.php:31
+msgid "Edit Short Link"
+msgstr "Редактировать короткую ссылку"
+
+#: src/Post/Type/Short_Link.php:32
+msgid "View Short Link"
+msgstr "Посмотреть короткую ссылку"
+
+#: src/Post/Type/Short_Link.php:33
+msgid "All Short Links"
+msgstr "Все короткие ссылки"
+
+#: src/Post/Type/Short_Link.php:34
+msgid "Search Short Links"
+msgstr "Поиск по коротким ссылкам"
+
+#: src/Post/Type/Short_Link.php:35
+msgid "Parent Short Link:"
+msgstr "Короткая ссылка для родителей:"
+
+#: src/Post/Type/Short_Link.php:36
+msgid "No Short Links found"
+msgstr "Коротких ссылок не найдено"
+
+#: src/Post/Type/Short_Link.php:37
+msgid "No Short Links found in Trash"
+msgstr "Короткие ссылки в корзине не найдены"
+
+#: src/Post/Type/Short_Link.php:40
+msgid "Page URL"
+msgstr "URL страницы"
+
+#: src/Post/Type/Short_Link.php:41
+msgid "Redirect URL"
+msgstr "URL редиректа"
+
+#: src/Post/Type/Short_Link.php:42
+msgid "Number of clicks"
+msgstr "Кол-во кликов"
+
+#: src/Post/Type/Short_Link.php:43
+msgid "Number of unique clicks"
+msgstr "Кол-во уникальных кликов"
+
+#: src/Post/Type/Short_Link.php:98
+msgid "Link info"
+msgstr "Информация о ссылке"
+
+#: src/Post/Type/Short_Link.php:113
+msgid "Redirect to:"
+msgstr "Редирект:"
+
+#: src/Post/Type/Short_Link.php:236
+msgid "Number of clicks:"
+msgstr "Кол-во кликов:"
+
+#: src/Post/Type/Short_Link.php:237
+msgid "Number of unique clicks:"
+msgstr "Кол-во уникальных кликов:"

@@ -16,10 +16,16 @@
 		private string       $column_key_number_clicks        = 'number-clicks';
 		private string       $column_key_number_unique_clicks = 'number-unique-clicks';
 		
-		/**
-		 * Constructor to set labels and new columns
-		 */
 		public function __construct() {
+			add_action( 'init', [ $this, 'completing_translations' ] );
+		}
+		
+		/**
+		 * Get translated values
+		 *
+		 * @return void
+		 */
+		public function completing_translations() {
 			$this->labels      = [
 				'name'               => __( 'Short Links', 'short-link-generator' ),
 				'singular_name'      => __( 'Short Link', 'short-link-generator' ),
@@ -59,7 +65,7 @@
 		 * @return void
 		 */
 		public function register_post_type(): void {
-			$args = array(
+			$args         = array(
 				'labels'             => $this->labels,
 				'public'             => true,
 				'publicly_queryable' => true,
@@ -231,11 +237,11 @@
 		 */
 		public function register_post_info_submitbox() {
 			global $post;
-			$clicks_value = get_post_meta( $post->ID, self::$field_key_number_clicks, true );
+			$clicks_value        = get_post_meta( $post->ID, self::$field_key_number_clicks, true );
 			$unique_clicks_value = get_post_meta( $post->ID, self::$field_key_number_unique_clicks, true );
-			$clicks_label = __( 'Number of clicks:', 'short-link-generator' );
+			$clicks_label        = __( 'Number of clicks:', 'short-link-generator' );
 			$unique_clicks_label = __( 'Number of unique clicks:', 'short-link-generator' );
-			$html_output    = <<<HTML
+			$html_output         = <<<HTML
 				<div class="misc-pub-section dashicons-admin-links misc-pub-section__clicks">
 					{$clicks_label}
 					<b>{$clicks_value}</b>

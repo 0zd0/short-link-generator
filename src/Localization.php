@@ -9,7 +9,7 @@
 		 * @return void
 		 */
 		public function register(): void {
-			add_action( 'init', [ $this, 'load' ] );
+			add_action( 'plugins_loaded', [ $this, 'load' ] );
 		}
 		
 		/**
