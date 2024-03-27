@@ -5,16 +5,16 @@
 	use Pavl\Short_Link_Generator\Config;
 	
 	class Short_Link {
-		private array  $labels                          = [];
-		private array  $new_columns                     = [];
-		private string $slug                            = 'short-link';
-		private string $field_key_redirect              = 'short-link-redirect';
-		private string $field_key_number_clicks         = 'short-link-number-clicks';
-		private string $field_key_number_unique_clicks  = 'short-link-number-unique-clicks';
-		private string $column_key_page_url             = 'page-url';
-		private string $column_key_redirect_url         = 'redirect-url';
-		private string $column_key_number_clicks        = 'number-clicks';
-		private string $column_key_number_unique_clicks = 'number-unique-clicks';
+		public static string $slug                            = 'short-link';
+		private array        $labels                          = [];
+		private array        $new_columns                     = [];
+		public static string $field_key_redirect              = 'short-link-redirect';
+		public static string $field_key_number_clicks         = 'short-link-number-clicks';
+		public static string $field_key_number_unique_clicks  = 'short-link-number-unique-clicks';
+		private string       $column_key_page_url             = 'page-url';
+		private string       $column_key_redirect_url         = 'redirect-url';
+		private string       $column_key_number_clicks        = 'number-clicks';
+		private string       $column_key_number_unique_clicks = 'number-unique-clicks';
 		
 		public function __construct() {
 			$this->labels      = [
@@ -53,20 +53,20 @@
 				'show_ui'            => true,
 				'show_in_menu'       => true,
 				'query_var'          => true,
-				'rewrite'            => array( 'slug' => $this->slug ),
+				'rewrite'            => array( 'slug' => $this::$slug ),
 				'capability_type'    => 'post',
-				'has_archive'        => false,
+				'has_archive'        => true,
 				'hierarchical'       => false,
 				'menu_position'      => null,
 				'supports'           => array( 'title' )
 			);
 			
-			register_post_type( $this->slug, $args );
+			register_post_type( $this::$slug, $args );
 		}
 		
 		public function add_meta_boxes(): void {
 			add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
-			add_action( "save_post_{$this->slug}", array( $this, 'register_save_meta_boxes' ) );
+			add_action( "save_post_{$this::$slug}", array( $this, 'register_save_meta_boxes' ) );
 		}
 		
 		public function register_meta_boxes(): void {
@@ -74,17 +74,18 @@
 				'short_link_meta_box_main',
 				__( 'Link info', 'short-link-generator' ),
 				array( $this, 'render_meta_box' ),
-				$this->slug,
+				$this::$slug,
 			);
 		}
 		
 		public function render_meta_box( object $post ) {
-			$redirect_value = get_post_meta( $post->ID, $this->field_key_redirect, true );
+			$redirect_value = get_post_meta( $post->ID, self::$field_key_redirect, true );
 			$redirect_label = __( 'Redirect to:', 'short-link-generator' );
+			$redirect_key   = self::$field_key_redirect;
 			$html_output    = <<<HTML
 				<div class="slg-meta-box__field">
-					<label for="{$this->field_key_redirect}" class="slg-meta-box__label">{$redirect_label}</label>
-			        <input type="text" id="{$this->field_key_redirect}" name="{$this->field_key_redirect}" value="%s" class="slg-meta-box__input">
+					<label for="{$redirect_key}" class="slg-meta-box__label">{$redirect_label}</label>
+			        <input type="text" id="{$redirect_key}" name="{$redirect_key}" value="%s" class="slg-meta-box__input">
 				</div>
 			HTML;
 			echo sprintf( $html_output, esc_attr( $redirect_value ) );
@@ -94,18 +95,18 @@
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 				return;
 			}
-			$redirect_value = $_POST[ $this->field_key_redirect ] ?? '';
+			$redirect_value = $_POST[ self::$field_key_redirect ] ?? '';
 			if ( filter_var( $redirect_value, FILTER_VALIDATE_URL ) ) {
 				remove_action( 'save_post', array( $this, 'register_save_meta_boxes' ) );
-				update_post_meta( $post_id, $this->field_key_redirect, sanitize_text_field( $_POST[ $this->field_key_redirect ] ) );
+				update_post_meta( $post_id, self::$field_key_redirect, sanitize_text_field( $_POST[ self::$field_key_redirect ] ) );
 				add_action( 'save_post', array( $this, 'register_save_meta_boxes' ) );
 			}
 		}
 		
 		public function add_columns(): void {
-			add_filter( "manage_{$this->slug}_posts_columns", array( $this, 'register_columns' ) );
-			add_action( "manage_{$this->slug}_posts_custom_column", array( $this, 'register_columns_content' ) );
-			add_filter( "manage_edit-{$this->slug}_sortable_columns", array( $this, 'register_sortable_columns' ) );
+			add_filter( "manage_{$this::$slug}_posts_columns", array( $this, 'register_columns' ) );
+			add_action( "manage_{$this::$slug}_posts_custom_column", array( $this, 'register_columns_content' ) );
+			add_filter( "manage_edit-{$this::$slug}_sortable_columns", array( $this, 'register_sortable_columns' ) );
 		}
 		
 		public function register_sortable_columns( array $columns ): array {
@@ -124,14 +125,65 @@
 				$post_url = get_the_permalink();
 				echo sprintf( '<a href="%s">%s</a>', esc_url( $post_url ), urldecode( esc_url( $post_url ) ) );
 			} elseif ( $column_name == $this->column_key_redirect_url ) {
-				$redirect_value = get_post_meta( get_the_ID(), $this->field_key_redirect, true );
+				$redirect_value = get_post_meta( get_the_ID(), self::$field_key_redirect, true );
 				echo sprintf( '<a href="%s">%s</a>', esc_url( $redirect_value ), urldecode( esc_url( $redirect_value ) ) );
 			} elseif ( $column_name == $this->column_key_number_clicks ) {
-				$number_clicks_value = get_post_meta( get_the_ID(), $this->field_key_number_clicks, true );
+				$number_clicks_value = get_post_meta( get_the_ID(), self::$field_key_number_clicks, true );
 				echo sprintf( '%d', $number_clicks_value );
 			} elseif ( $column_name == $this->column_key_number_unique_clicks ) {
-				$number_unique_clicks_value = get_post_meta( get_the_ID(), $this->field_key_number_unique_clicks, true );
+				$number_unique_clicks_value = get_post_meta( get_the_ID(), self::$field_key_number_unique_clicks, true );
 				echo sprintf( '%d', $number_unique_clicks_value );
 			}
+		}
+		
+		/**
+		 * @param int $post_id
+		 *
+		 * @return string
+		 */
+		public static function get_redirect( int $post_id ): string {
+			return get_post_meta( $post_id, self::$field_key_redirect, true );
+		}
+		
+		/**
+		 * @param int $post_id
+		 *
+		 * @return int
+		 */
+		public static function get_number_clicks( int $post_id ): int {
+			$value = get_post_meta( $post_id, self::$field_key_number_clicks, true );
+			
+			return (int) $value;
+		}
+		
+		/**
+		 * @param int $post_id
+		 *
+		 * @return int
+		 */
+		public static function get_unique_number_clicks( int $post_id ): int {
+			$value = get_post_meta( $post_id, self::$field_key_number_unique_clicks, true );
+			
+			return (int) $value;
+		}
+		
+		/**
+		 * @param int $post_id
+		 *
+		 * @return void
+		 */
+		public static function add_click( int $post_id ): void {
+			$clicks = self::get_number_clicks( $post_id );
+			update_post_meta( $post_id, self::$field_key_number_clicks, ++ $clicks );
+		}
+		
+		/**
+		 * @param int $post_id
+		 *
+		 * @return void
+		 */
+		public static function add_unique_click( int $post_id ): void {
+			$clicks = self::get_unique_number_clicks( $post_id );
+			update_post_meta( $post_id, self::$field_key_number_unique_clicks, ++ $clicks );
 		}
 	}

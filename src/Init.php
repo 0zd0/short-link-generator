@@ -5,9 +5,15 @@
     use Pavl\Short_Link_Generator\Admin;
 	
 	class Init extends Singleton {
+		private string $rewrite_option = 'rewrite_rules';
         public function activate(): void {
-        
+	        delete_option( $this->rewrite_option );
         }
+		
+		public function deactivate(): void {
+			delete_option( $this->rewrite_option );
+		}
+		
 		public static function init(): void {
 			$localization = new Localization();
             $localization->register();
@@ -19,6 +25,8 @@
 			
 			$admin_assets = new Admin\Assets();
             $admin_assets->register();
-            
+			
+			$redirect = new Redirect();
+            $redirect->register();
 		}
 	}
