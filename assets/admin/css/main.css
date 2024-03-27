@@ -12,3 +12,14 @@
 .slg-meta-box__input {
     width: 100%;
 }
+
+.misc-pub-section__clicks::before,
+.misc-pub-section__unique-clicks::before {
+    color: #8c8f94;
+    font: normal 20px/1 dashicons;
+    display: inline-block;
+    margin-left: -1px;
+    padding-right: 3px;
+    vertical-align: top;
+    -webkit-font-smoothing: antialiased;
+}

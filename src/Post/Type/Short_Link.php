@@ -88,7 +88,10 @@
 			        <input type="text" id="{$redirect_key}" name="{$redirect_key}" value="%s" class="slg-meta-box__input">
 				</div>
 			HTML;
-			echo sprintf( $html_output, esc_attr( $redirect_value ) );
+			echo sprintf(
+				$html_output,
+				esc_attr( $redirect_value )
+			);
 		}
 		
 		public function register_save_meta_boxes( string $post_id ): void {
@@ -123,17 +126,53 @@
 		public function register_columns_content( string $column_name ): void {
 			if ( $column_name == $this->column_key_page_url ) {
 				$post_url = get_the_permalink();
-				echo sprintf( '<a href="%s">%s</a>', esc_url( $post_url ), urldecode( esc_url( $post_url ) ) );
+				echo sprintf(
+					'<a href="%s">%s</a>',
+					esc_url( $post_url ),
+					urldecode( esc_url( $post_url ) )
+				);
 			} elseif ( $column_name == $this->column_key_redirect_url ) {
 				$redirect_value = get_post_meta( get_the_ID(), self::$field_key_redirect, true );
-				echo sprintf( '<a href="%s">%s</a>', esc_url( $redirect_value ), urldecode( esc_url( $redirect_value ) ) );
+				echo sprintf(
+					'<a href="%s">%s</a>',
+					esc_url( $redirect_value ),
+					urldecode( esc_url( $redirect_value ) )
+				);
 			} elseif ( $column_name == $this->column_key_number_clicks ) {
 				$number_clicks_value = get_post_meta( get_the_ID(), self::$field_key_number_clicks, true );
-				echo sprintf( '%d', $number_clicks_value );
+				echo sprintf(
+					'%d', $number_clicks_value
+				);
 			} elseif ( $column_name == $this->column_key_number_unique_clicks ) {
 				$number_unique_clicks_value = get_post_meta( get_the_ID(), self::$field_key_number_unique_clicks, true );
-				echo sprintf( '%d', $number_unique_clicks_value );
+				echo sprintf(
+					'%d',
+					$number_unique_clicks_value
+				);
 			}
+		}
+		
+		public function add_info() {
+			add_action( 'post_submitbox_misc_actions', [ $this, 'register_post_info_submitbox' ] );
+		}
+		
+		public function register_post_info_submitbox() {
+			global $post;
+			$clicks_value = get_post_meta( $post->ID, self::$field_key_number_clicks, true );
+			$unique_clicks_value = get_post_meta( $post->ID, self::$field_key_number_unique_clicks, true );
+			$clicks_label = __( 'Number of clicks:', 'short-link-generator' );
+			$unique_clicks_label = __( 'Number of unique clicks:', 'short-link-generator' );
+			$html_output    = <<<HTML
+				<div class="misc-pub-section dashicons-admin-links misc-pub-section__clicks">
+					{$clicks_label}
+					<b>{$clicks_value}</b>
+				</div>
+				<div class="misc-pub-section dashicons-admin-links misc-pub-section__unique-clicks">
+					{$unique_clicks_label}
+					<b>{$unique_clicks_value}</b>
+				</div>
+			HTML;
+			echo $html_output;
 		}
 		
 		/**

@@ -22,6 +22,7 @@
 			$post_type_short_link->register();
             $post_type_short_link->add_meta_boxes();
             $post_type_short_link->add_columns();
+            $post_type_short_link->add_info();
 			
 			$admin_assets = new Admin\Assets();
             $admin_assets->register();
